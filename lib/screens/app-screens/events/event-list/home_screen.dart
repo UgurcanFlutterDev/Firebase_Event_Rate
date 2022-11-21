@@ -27,7 +27,8 @@ class HomeScreen extends GetView<LoginController> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
             }
-            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+
+            if (!snapshot.hasData || (snapshot.data != null && snapshot.data!.docs.isEmpty)) {
               return Text("Organizasyon Bulunmamaktadır.");
             }
             final List<EventModel> list = snapshot.data!.docs.map((e) => EventModel.fromDocument(e)).toList();
@@ -48,6 +49,7 @@ class HomeScreen extends GetView<LoginController> {
                   },
                   child: Ink(
                     padding: EdgeInsets.all(15),
+                    height: 120,
                     decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius: BorderRadius.circular(8),
@@ -71,22 +73,26 @@ class HomeScreen extends GetView<LoginController> {
                           ),
                         ),
                         SizedBox(width: 10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              list[index].title ?? "",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                list[index].title ?? "",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                            Text(
-                              list[index].subTitle ?? "",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                          ],
+                              Flexible(
+                                child: Text(
+                                  list[index].subTitle ?? "",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
